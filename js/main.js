@@ -104,7 +104,7 @@ function verificar_intentos(intentos) {
 
       let sound_perdedor = new Howl({
         // src: ["../sound/perdedor.mp3"],
-        src: ["https://ringtones-mp3.com/mobile-rington/_ld/9/924_mobile-rington..mp3"],
+        src: ["https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/perdedor.mp3?raw=true"],
         html5: true,
       });
 
@@ -153,7 +153,7 @@ function mostrarInformacionCaracter(evObject) {
 
             let sound_ganador = new Howl({
             //   src: ["../sound/ganador.mp3"],
-              src:["http://www.sonidosmp3gratis.com/sounds/bites-ta-da-winner.mp3"],
+              src:["https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/ganador.mp3?raw=true"],
               html5: true,
             });
 
