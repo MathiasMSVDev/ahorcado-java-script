@@ -80,43 +80,42 @@ function verificar_intentos(intentos) {
       pie_derecho();
       juego_terminado = true;
 
-      Swal.fire({
-        icon: "error",
-        title: "Perdiste",
-        text: "¿Deseas volver a jugar?",
-        showCloseButton: true,
-        showDenyButton: true,
-        confirmButtonText: "Sí",
-        denyButtonText: `No`,
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        allowEnterKey: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "./game.html";
-        } else if (result.isDenied) {
-          window.location.href = "./";
-        } else if (result.isDismissed) {
-          console.log("Cerrado desde la X");
-        }
-        console.log(result);
-      });
-
       let sound_perdedor = new Howl({
         // src: ["../sound/perdedor.mp3"],
-        src: ["https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/perdedor.mp3?raw=true"],
+        src: [
+          "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/perdedor.mp3?raw=true",
+        ],
         html5: true,
       });
 
-      sound_perdedor.play();
+      sound_perdedor.once("load", function () {
+        sound_perdedor.play();
+      });
 
-    //   sound_perdedor.once("load", function () {
-    //     sound_perdedor.play();
-    //   });
-
-    //   sound_perdedor.on("end", function () {
-    //     console.log("Finished!");
-    //   });
+      sound_perdedor.on("end", function () {
+        console.log("Finished!");
+        Swal.fire({
+          icon: "error",
+          title: "Perdiste",
+          text: "¿Deseas volver a jugar?",
+          showCloseButton: true,
+          showDenyButton: true,
+          confirmButtonText: "Sí",
+          denyButtonText: `No`,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "./game.html";
+          } else if (result.isDenied) {
+            window.location.href = "./";
+          } else if (result.isDismissed) {
+            console.log("Cerrado desde la X");
+          }
+          console.log(result);
+        });
+      });
 
       console.log("Perdiste");
       break;
@@ -152,42 +151,50 @@ function mostrarInformacionCaracter(evObject) {
             juego_terminado = true;
 
             let sound_ganador = new Howl({
-            //   src: ["../sound/ganador.mp3"],
-              src:["https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/ganador.mp3?raw=true"],
+              //   src: ["../sound/ganador.mp3"],
+              src: [
+                "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/ganador.mp3?raw=true",
+              ],
               html5: true,
             });
 
-            sound_ganador.play();
+            sound_ganador.once("load", function () {
+              sound_ganador.play();
+            });
 
-            const jsConfetti = new JSConfetti({ pantalla });
+            sound_ganador.on("end", function () {
+              console.log("Finished!");
 
-            jsConfetti
-              .addConfetti({
-                confettiNumber: 2000,
-              })
-              .then(() =>
-                Swal.fire({
-                  icon: "success",
-                  title: "Ganaste!!!",
-                  text: "¿Deseas volver a jugar?",
-                  showCloseButton: true,
-                  showDenyButton: true,
-                  confirmButtonText: "Sí",
-                  denyButtonText: `No`,
-                  allowOutsideClick: false,
-                  allowEscapeKey: false,
-                  allowEnterKey: false,
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    window.location.href = "./game.html";
-                  } else if (result.isDenied) {
-                    window.location.href = "./";
-                  } else if (result.isDismissed) {
-                    console.log("Cerrado desde la X");
-                  }
-                  console.log(result);
+              const jsConfetti = new JSConfetti({ pantalla });
+
+              jsConfetti
+                .addConfetti({
+                  confettiNumber: 2000,
                 })
-              );
+                .then(() =>
+                  Swal.fire({
+                    icon: "success",
+                    title: "Ganaste!!!",
+                    text: "¿Deseas volver a jugar?",
+                    showCloseButton: true,
+                    showDenyButton: true,
+                    confirmButtonText: "Sí",
+                    denyButtonText: `No`,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.location.href = "./game.html";
+                    } else if (result.isDenied) {
+                      window.location.href = "./";
+                    } else if (result.isDismissed) {
+                      console.log("Cerrado desde la X");
+                    }
+                    console.log(result);
+                  })
+                );
+            });
           }
         }
       } else {
