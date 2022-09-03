@@ -50,6 +50,82 @@ function cargar_input_letras(palabra_elegida) {
   ingresar_letras.innerHTML = ingresar_letras_html;
 }
 
+function show_swal_perdiste() {
+  Swal.fire({
+    icon: "error",
+    title: "Perdiste",
+    text: "¿Deseas volver a jugar?",
+    showCloseButton: true,
+    showDenyButton: true,
+    confirmButtonText: "Sí",
+    denyButtonText: `No`,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "./game.html";
+    } else if (result.isDenied) {
+      window.location.href = "./";
+    } else if (result.isDismissed) {
+      console.log("Cerrado desde la X");
+    }
+    console.log(result);
+  });
+}
+
+function show_swal_ganaste() {
+  Swal.fire({
+    icon: "success",
+    title: "Ganaste!!!",
+    text: "¿Deseas volver a jugar?",
+    showCloseButton: true,
+    showDenyButton: true,
+    confirmButtonText: "Sí",
+    denyButtonText: `No`,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "./game.html";
+    } else if (result.isDenied) {
+      window.location.href = "./";
+    } else if (result.isDismissed) {
+      console.log("Cerrado desde la X");
+    }
+    console.log(result);
+  });
+}
+
+function music_perdedor() {
+  let sound_perdedor = new Howl({
+    src: [
+      "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/perdedor.mp3?raw=true",
+    ],
+    html5: true,
+  });
+  sound_perdedor.play();
+}
+
+function music_ganador() {
+  let sound_ganador = new Howl({
+    src: [
+      "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/ganador.mp3?raw=true",
+    ],
+    html5: true,
+  });
+  sound_ganador.play();
+}
+
+function show_confetti() {
+  const jsConfetti = new JSConfetti({ pantalla });
+
+  jsConfetti.addConfetti({
+    confettiNumber: 2000,
+  });
+}
+
 function verificar_intentos(intentos) {
   switch (intentos) {
     case 1:
@@ -79,43 +155,45 @@ function verificar_intentos(intentos) {
     case 9:
       pie_derecho();
       juego_terminado = true;
+      setTimeout(music_perdedor, 100);
+      setTimeout(show_swal_perdiste, 1000);
 
-      let sound_perdedor = new Howl({
-        // src: ["../sound/perdedor.mp3"],
-        src: [
-          "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/perdedor.mp3?raw=true",
-        ],
-        html5: true,
-      });
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Perdiste",
+      //     text: "¿Deseas volver a jugar?",
+      //     showCloseButton: true,
+      //     showDenyButton: true,
+      //     confirmButtonText: "Sí",
+      //     denyButtonText: `No`,
+      //     allowOutsideClick: false,
+      //     allowEscapeKey: false,
+      //     allowEnterKey: false,
+      //   }).then((result) => {
+      //     if (result.isConfirmed) {
+      //       window.location.href = "./game.html";
+      //     } else if (result.isDenied) {
+      //       window.location.href = "./";
+      //     } else if (result.isDismissed) {
+      //       console.log("Cerrado desde la X");
+      //     }
+      //     console.log(result);
+      //   });
 
-      sound_perdedor.once("load", function () {
-        sound_perdedor.play();
-      });
+      //   let sound_perdedor = new Howl({
+      //     src: [
+      //       "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/perdedor.mp3?raw=true",
+      //     ],
+      //     html5: true,
+      //   });
 
-      sound_perdedor.on("end", function () {
-        console.log("Finished!");
-        Swal.fire({
-          icon: "error",
-          title: "Perdiste",
-          text: "¿Deseas volver a jugar?",
-          showCloseButton: true,
-          showDenyButton: true,
-          confirmButtonText: "Sí",
-          denyButtonText: `No`,
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          allowEnterKey: false,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = "./game.html";
-          } else if (result.isDenied) {
-            window.location.href = "./";
-          } else if (result.isDismissed) {
-            console.log("Cerrado desde la X");
-          }
-          console.log(result);
-        });
-      });
+      //   sound_perdedor.once("load", function () {
+      //     sound_perdedor.play();
+      //   });
+
+      //   sound_perdedor.on("end", function () {
+      //     console.log("Finished!");
+      //   });
 
       console.log("Perdiste");
       break;
@@ -149,52 +227,55 @@ function mostrarInformacionCaracter(evObject) {
           ) {
             console.log("Ganaste");
             juego_terminado = true;
+            setTimeout(music_ganador, 100);
+            setTimeout(show_confetti, 200);
+            setTimeout(show_confetti, 1000);
+            setTimeout(show_swal_ganaste, 1000);
 
-            let sound_ganador = new Howl({
-              //   src: ["../sound/ganador.mp3"],
-              src: [
-                "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/ganador.mp3?raw=true",
-              ],
-              html5: true,
-            });
+            // let sound_ganador = new Howl({
+            //   src: [
+            //     "https://github.com/JakubSkraly/ahorcado-java-script/blob/main/sound/ganador.mp3?raw=true",
+            //   ],
+            //   html5: true,
+            // });
 
-            sound_ganador.once("load", function () {
-              sound_ganador.play();
-            });
+            // sound_ganador.once("load", function () {
+            //   sound_ganador.play();
+            // });
 
-            sound_ganador.on("end", function () {
-              console.log("Finished!");
+            // sound_ganador.on("end", function () {
+            //   console.log("Finished!");
 
-              const jsConfetti = new JSConfetti({ pantalla });
+            //   const jsConfetti = new JSConfetti({ pantalla });
 
-              jsConfetti
-                .addConfetti({
-                  confettiNumber: 2000,
-                })
-                .then(() =>
-                  Swal.fire({
-                    icon: "success",
-                    title: "Ganaste!!!",
-                    text: "¿Deseas volver a jugar?",
-                    showCloseButton: true,
-                    showDenyButton: true,
-                    confirmButtonText: "Sí",
-                    denyButtonText: `No`,
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      window.location.href = "./game.html";
-                    } else if (result.isDenied) {
-                      window.location.href = "./";
-                    } else if (result.isDismissed) {
-                      console.log("Cerrado desde la X");
-                    }
-                    console.log(result);
-                  })
-                );
-            });
+            //   jsConfetti
+            //     .addConfetti({
+            //       confettiNumber: 2000,
+            //     })
+            //     .then(() =>
+            //       Swal.fire({
+            //         icon: "success",
+            //         title: "Ganaste!!!",
+            //         text: "¿Deseas volver a jugar?",
+            //         showCloseButton: true,
+            //         showDenyButton: true,
+            //         confirmButtonText: "Sí",
+            //         denyButtonText: `No`,
+            //         allowOutsideClick: false,
+            //         allowEscapeKey: false,
+            //         allowEnterKey: false,
+            //       }).then((result) => {
+            //         if (result.isConfirmed) {
+            //           window.location.href = "./game.html";
+            //         } else if (result.isDenied) {
+            //           window.location.href = "./";
+            //         } else if (result.isDismissed) {
+            //           console.log("Cerrado desde la X");
+            //         }
+            //         console.log(result);
+            //       })
+            //     );
+            // });
           }
         }
       } else {
