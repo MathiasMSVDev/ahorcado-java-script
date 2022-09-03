@@ -228,9 +228,9 @@ function mostrarInformacionCaracter(evObject) {
             console.log("Ganaste");
             juego_terminado = true;
             setTimeout(music_ganador, 100);
-            setTimeout(show_confetti, 500);
             setTimeout(show_confetti, 1000);
             setTimeout(show_swal_ganaste, 1000);
+            setTimeout(show_confetti, 2000);
 
             // let sound_ganador = new Howl({
             //   src: [
