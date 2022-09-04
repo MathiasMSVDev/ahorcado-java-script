@@ -8,6 +8,10 @@ const palabras_secretas = [
     "JAKUB",
 ];
 
+if (localStorage.getItem("palabra_extra")) {
+    palabras_secretas.push(localStorage.getItem("palabra_extra"));
+}
+
 const longitud_array = palabras_secretas.length;
 
 let juego_terminado = false;
@@ -30,7 +34,6 @@ const palabra_elegida = elegir_palabra_secreta(longitud_array);
 array_letras = Array.from(palabra_elegida);
 array_palabra_verificar = Array.from(palabra_elegida);
 console.log(array_letras);
-console.log(array_palabra_verificar);
 
 function mostrar_guiones(palabra_elegida) {
     const grupo_lineas = document.getElementById("grupo-lineas");
@@ -48,6 +51,29 @@ function cargar_input_letras(palabra_elegida) {
         ingresar_letras_html += `<input type="text" class="text-center" id="${i}" disabled>`;
     }
     ingresar_letras.innerHTML = ingresar_letras_html;
+}
+
+function show_swal_desistir() {
+    Swal.fire({
+        icon: "error",
+        title: "Perdiste",
+        html: `La palabra secreta era: <b>${palabra_elegida}</b> <br><br> ¿Deseas volver a jugar?`,
+        showCloseButton: true,
+        showDenyButton: true,
+        confirmButtonText: "Sí",
+        denyButtonText: "No",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "./game.html";
+        } else if (result.isDenied) {
+            window.location.href = "./";
+        } else if (result.isDismissed) {
+            window.location.href = "./game.html";
+        }
+    });
 }
 
 function show_swal_perdiste() {
@@ -193,7 +219,6 @@ function ejecutar_juego(evObject) {
                 if (letra_mostrar) {
                     letra_mostrar.value = array_letras[posicion];
                     array_palabra_verificar[posicion] = "";
-                    console.log(array_palabra_verificar);
                     if (array_palabra_verificar.filter((element) => element == "").length == array_letras.length) {
                         juego_terminado = true;
                         setTimeout(music_ganador, 100);
@@ -236,3 +261,9 @@ window.onload = function () {
     mostrar_guiones(palabra_elegida);
     cargar_input_letras(palabra_elegida);
 };
+
+document.querySelector(".btn-desistir").addEventListener("click", function (e) {
+    juego_terminado = true;
+    music_perdedor();
+    show_swal_desistir();
+});

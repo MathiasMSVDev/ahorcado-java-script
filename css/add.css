@@ -26,6 +26,14 @@
     gap: 10px;
 }
 
+.swal2-container .swal2-popup {
+    border-radius: 25px !important;
+    width: 400px !important;
+    height: auto !important;
+    font-family: "Inter" !important;
+    font-style: normal !important;
+}
+
 .ingresar-palabra {
     display: flex;
     justify-content: center;

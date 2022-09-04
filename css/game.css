@@ -156,7 +156,7 @@ b {
     color: #ffffff;
 }
 
-.btn-cancelar {
+.btn-desistir {
     padding: 24px;
     width: 332px;
     height: 67px;
@@ -166,7 +166,7 @@ b {
     text-decoration: none;
 }
 
-.btn-cancelar p {
+.btn-desistir p {
     display: flex;
     align-items: center;
     justify-content: center;
