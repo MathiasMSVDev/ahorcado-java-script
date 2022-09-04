@@ -19,6 +19,7 @@
 }
 
 .card-body {
+    background: #f3f5fc;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -118,6 +119,24 @@ b {
     outline: none;
 }
 
+.teclado {
+    display: none;
+}
+
+/* .teclado button {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    background: #0a3871;
+    color: #ffffff;
+    border-radius: 24px;
+    text-decoration: none;
+    border: none;
+    width: 30px;
+    height: 30px;
+} */
+
 .botones {
     display: flex;
     flex-direction: column;
@@ -206,7 +225,32 @@ b {
     color: #ffffff;
 }
 
-@media screen and (max-width: 705px) {
+@media screen and (max-width: 912px) {
+    .teclado {
+        display: flex;
+        justify-content: space-evenly;
+        background: transparent;
+    }
+
+    .teclado button {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        background: #0a3871;
+        color: #ffffff;
+        border-radius: 24px;
+        text-decoration: none;
+        border: none;
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media screen and (max-width: 710px) {
+    .botones {
+        margin-top: 25px;
+    }
     .botones-body {
         display: flex;
         flex-direction: column;
@@ -220,5 +264,11 @@ b {
 
     .grupo-lineas input {
         width: 40px;
+    }
+
+    .teclado button {
+        font-size: 15px;
+        width: 30px;
+        height: 30px;
     }
 }

@@ -206,7 +206,43 @@ function verificar_intentos(intentos) {
     }
 }
 
-function ejecutar_juego(evObject) {
+function ejecutar_juego_mobile(caracter) {
+    // Acepta solo letras mayusculas, Ñ, Ä, Ë, Ï, Ö, Ü => PINGÜINO, ÑANDU
+    if (/^[A-ZÄËÏÖÜ\u00d1\s]*$/.test(caracter)) {
+        const letra_encontrada = array_palabra_verificar.find((element) => element == caracter);
+        if (letra_encontrada) {
+            const posicion = array_palabra_verificar.indexOf(caracter);
+            const letra_mostrar = document.getElementById(posicion);
+            if (letra_mostrar) {
+                letra_mostrar.value = array_letras[posicion];
+                array_palabra_verificar[posicion] = "";
+                if (array_palabra_verificar.filter((element) => element == "").length == array_letras.length) {
+                    juego_terminado = true;
+                    setTimeout(music_ganador, 100);
+                    setTimeout(show_confetti, 500);
+                    setTimeout(show_swal_ganaste, 1000);
+                    setTimeout(show_confetti, 2000);
+                }
+            }
+        } else {
+            if (array_errores.find((element) => element == caracter)) {
+                return;
+            } else {
+                let error_letras = document.getElementById("error-letras");
+                let error_letras_html = `<input type="text" class="text-center" value="${caracter}">`;
+                error_letras.innerHTML += error_letras_html;
+                array_errores.push(caracter);
+                intentos += 1;
+                verificar_intentos(intentos);
+            }
+        }
+    } else {
+        show_toast("info", "Solo se permiten letras")
+    }
+}
+
+function ejecutar_juego_desktop(evObject) {
+
     const caracter = String.fromCharCode(evObject.which).toUpperCase();
 
     if (evObject.which != 0 && evObject.which != 13) {
@@ -247,16 +283,24 @@ function ejecutar_juego(evObject) {
     }
 }
 
-function jugar(evObject) {
+function jugar_desktop(evObject) {
     if (juego_terminado) {
-        return;
+        return false;
     } else {
-        ejecutar_juego(evObject);
+        ejecutar_juego_desktop(evObject);
+    }
+}
+
+function jugar_mobile(valor) {
+    if (juego_terminado) {
+        return false;
+    } else {
+        ejecutar_juego_mobile(valor);
     }
 }
 
 window.onload = function () {
-    document.onkeypress = jugar;
+    document.onkeypress = jugar_desktop;
     base();
     mostrar_guiones(palabra_elegida);
     cargar_input_letras(palabra_elegida);
@@ -267,3 +311,7 @@ document.querySelector(".btn-desistir").addEventListener("click", function (e) {
     music_perdedor();
     show_swal_desistir();
 });
+
+function teclado_mobile(valor) {
+    jugar_mobile(valor);
+}

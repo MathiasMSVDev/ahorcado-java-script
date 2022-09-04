@@ -154,7 +154,7 @@
     color: #ffffff;
 }
 
-@media screen and (max-width: 705px) {
+@media screen and (max-width: 710px) {
     .botones-body {
         display: flex;
         flex-direction: column;
