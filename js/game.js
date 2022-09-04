@@ -11,8 +11,5 @@ document.querySelector(".bi-github").addEventListener("click", function (e) {
 });
 
 document.querySelector(".bi-linkedin").addEventListener("click", function (e) {
-    window.open(
-        "https://www.linkedin.com/in/jose-leonel-inga-quintana/",
-        "_blank"
-    );
+    window.open("https://www.linkedin.com/in/jose-leonel-inga-quintana/", "_blank");
 });

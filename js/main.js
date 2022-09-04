@@ -54,11 +54,11 @@ function show_swal_perdiste() {
     Swal.fire({
         icon: "error",
         title: "Perdiste",
-        text: "¿Deseas volver a jugar?",
+        html: `La palabra secreta era: <b>${palabra_elegida}</b> <br><br> ¿Deseas volver a jugar?`,
         showCloseButton: true,
         showDenyButton: true,
         confirmButtonText: "Sí",
-        denyButtonText: `No`,
+        denyButtonText: "No",
         allowOutsideClick: false,
         allowEscapeKey: false,
         allowEnterKey: false,
@@ -70,7 +70,6 @@ function show_swal_perdiste() {
         } else if (result.isDismissed) {
             console.log("Cerrado desde la X");
         }
-        console.log(result);
     });
 }
 
@@ -82,7 +81,7 @@ function show_swal_ganaste() {
         showCloseButton: true,
         showDenyButton: true,
         confirmButtonText: "Sí",
-        denyButtonText: `No`,
+        denyButtonText: "No",
         allowOutsideClick: false,
         allowEscapeKey: false,
         allowEnterKey: false,
@@ -94,7 +93,6 @@ function show_swal_ganaste() {
         } else if (result.isDismissed) {
             console.log("Cerrado desde la X");
         }
-        console.log(result);
     });
 }
 
@@ -123,6 +121,25 @@ function show_confetti() {
 
     jsConfetti.addConfetti({
         confettiNumber: 2000,
+    });
+}
+
+function show_toast(icon, message) {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+    });
+
+    Toast.fire({
+        icon: icon,
+        title: message,
     });
 }
 
@@ -157,23 +174,19 @@ function verificar_intentos(intentos) {
             juego_terminado = true;
             setTimeout(music_perdedor, 100);
             setTimeout(show_swal_perdiste, 1000);
-            console.log("Perdiste");
             break;
         default:
             break;
     }
 }
 
-function mostrarInformacionCaracter(evObject) {
+function ejecutar_juego(evObject) {
     const caracter = String.fromCharCode(evObject.which).toUpperCase();
 
     if (evObject.which != 0 && evObject.which != 13) {
-        console.log("Tecla pulsada: " + caracter);
+        // Acepta solo letras mayusculas, Ñ, Ä, Ë, Ï, Ö, Ü => PINGÜINO, ÑANDU
         if (/^[A-ZÄËÏÖÜ\u00d1\s]*$/.test(caracter)) {
-            console.log("es una letra");
-            const letra_encontrada = array_palabra_verificar.find(
-                (element) => element == caracter
-            );
+            const letra_encontrada = array_palabra_verificar.find((element) => element == caracter);
             if (letra_encontrada) {
                 const posicion = array_palabra_verificar.indexOf(caracter);
                 const letra_mostrar = document.getElementById(posicion);
@@ -181,21 +194,17 @@ function mostrarInformacionCaracter(evObject) {
                     letra_mostrar.value = array_letras[posicion];
                     array_palabra_verificar[posicion] = "";
                     console.log(array_palabra_verificar);
-                    if (
-                        array_palabra_verificar.filter((element) => element == "").length ==
-                        array_letras.length
-                    ) {
-                        console.log("Ganaste");
+                    if (array_palabra_verificar.filter((element) => element == "").length == array_letras.length) {
                         juego_terminado = true;
                         setTimeout(music_ganador, 100);
-                        setTimeout(show_confetti, 1000);
+                        setTimeout(show_confetti, 500);
                         setTimeout(show_swal_ganaste, 1000);
                         setTimeout(show_confetti, 2000);
                     }
                 }
             } else {
                 if (array_errores.find((element) => element == caracter)) {
-                    console.log("Letar mal ya ingresada");
+                    return;
                 } else {
                     let error_letras = document.getElementById("error-letras");
                     let error_letras_html = `<input type="text" class="text-center" value="${caracter}">`;
@@ -203,60 +212,27 @@ function mostrarInformacionCaracter(evObject) {
                     array_errores.push(caracter);
                     intentos += 1;
                     verificar_intentos(intentos);
-                    console.log("MAL");
                 }
             }
         } else {
-            console.log("No es una letra");
-            const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener("mouseenter", Swal.stopTimer);
-                    toast.addEventListener("mouseleave", Swal.resumeTimer);
-                },
-            });
-
-            Toast.fire({
-                icon: "info",
-                title: "Solo se permiten letras",
-            });
+            show_toast("info", "Solo se permiten letras")
         }
     } else {
-        console.log("Tecla No Valida");
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            },
-        });
-
-        Toast.fire({
-            icon: "info",
-            title: "Solo se permiten letras",
-        });
+        show_toast("info", "Solo se permiten letras")
     }
 }
 
 function jugar(evObject) {
     if (juego_terminado) {
-        console.log("Ya termino el juego!!!");
         return;
     } else {
-        mostrarInformacionCaracter(evObject);
+        ejecutar_juego(evObject);
     }
 }
 
 window.onload = function () {
     document.onkeypress = jugar;
+    base();
     mostrar_guiones(palabra_elegida);
     cargar_input_letras(palabra_elegida);
 };

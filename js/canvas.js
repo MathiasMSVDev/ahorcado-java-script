@@ -87,5 +87,3 @@ function pie_derecho() {
     pincel.closePath();
     pincel.stroke();
 }
-
-base();
