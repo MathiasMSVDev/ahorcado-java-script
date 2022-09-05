@@ -246,6 +246,7 @@ b {
 
     .ingresar-letras input {
         width: 40px;
+        font-size: 35px;
     }
 
     .grupo-lineas input {
