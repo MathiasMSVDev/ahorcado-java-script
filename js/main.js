@@ -229,7 +229,7 @@ function ejecutar_juego_mobile(caracter) {
                 return;
             } else {
                 let error_letras = document.getElementById("error-letras");
-                let error_letras_html = `<input type="text" class="text-center" value="${caracter}">`;
+                let error_letras_html = `<input type="text" class="text-center" value="${caracter}" disabled>`;
                 error_letras.innerHTML += error_letras_html;
                 array_errores.push(caracter);
                 intentos += 1;
@@ -268,7 +268,7 @@ function ejecutar_juego_desktop(evObject) {
                     return;
                 } else {
                     let error_letras = document.getElementById("error-letras");
-                    let error_letras_html = `<input type="text" class="text-center" value="${caracter}">`;
+                    let error_letras_html = `<input type="text" class="text-center" value="${caracter}" disabled>`;
                     error_letras.innerHTML += error_letras_html;
                     array_errores.push(caracter);
                     intentos += 1;
