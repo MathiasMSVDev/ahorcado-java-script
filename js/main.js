@@ -33,7 +33,6 @@ const palabra_elegida = elegir_palabra_secreta(longitud_array);
 
 array_letras = Array.from(palabra_elegida);
 array_palabra_verificar = Array.from(palabra_elegida);
-console.log(array_letras);
 
 function mostrar_guiones(palabra_elegida) {
     const grupo_lineas = document.getElementById("grupo-lineas");
@@ -206,35 +205,43 @@ function verificar_intentos(intentos) {
     }
 }
 
+function show_letras_correct(caracter) {
+    const posicion = array_palabra_verificar.indexOf(caracter);
+    const letra_mostrar = document.getElementById(posicion);
+    if (letra_mostrar) {
+        letra_mostrar.value = array_letras[posicion];
+        array_palabra_verificar[posicion] = "";
+        if (array_palabra_verificar.filter((element) => element == "").length == array_letras.length) {
+            juego_terminado = true;
+            setTimeout(music_ganador, 100);
+            setTimeout(show_confetti, 500);
+            setTimeout(show_swal_ganaste, 1000);
+            setTimeout(show_confetti, 2000);
+        }
+    }
+}
+
+function show_letras_error(caracter) {
+    if (array_errores.find((element) => element == caracter)) {
+        return false;
+    } else {
+        let error_letras = document.getElementById("error-letras");
+        let error_letras_html = `<input type="text" class="text-center" value="${caracter}" disabled>`;
+        error_letras.innerHTML += error_letras_html;
+        array_errores.push(caracter);
+        intentos += 1;
+        verificar_intentos(intentos);
+    }
+}
+
 function ejecutar_juego_mobile(caracter) {
     // Acepta solo letras mayusculas, Ñ, Ä, Ë, Ï, Ö, Ü => PINGÜINO, ÑANDU
     if (/^[A-ZÄËÏÖÜ\u00d1\s]*$/.test(caracter)) {
         const letra_encontrada = array_palabra_verificar.find((element) => element == caracter);
         if (letra_encontrada) {
-            const posicion = array_palabra_verificar.indexOf(caracter);
-            const letra_mostrar = document.getElementById(posicion);
-            if (letra_mostrar) {
-                letra_mostrar.value = array_letras[posicion];
-                array_palabra_verificar[posicion] = "";
-                if (array_palabra_verificar.filter((element) => element == "").length == array_letras.length) {
-                    juego_terminado = true;
-                    setTimeout(music_ganador, 100);
-                    setTimeout(show_confetti, 500);
-                    setTimeout(show_swal_ganaste, 1000);
-                    setTimeout(show_confetti, 2000);
-                }
-            }
+            show_letras_correct(caracter);
         } else {
-            if (array_errores.find((element) => element == caracter)) {
-                return;
-            } else {
-                let error_letras = document.getElementById("error-letras");
-                let error_letras_html = `<input type="text" class="text-center" value="${caracter}" disabled>`;
-                error_letras.innerHTML += error_letras_html;
-                array_errores.push(caracter);
-                intentos += 1;
-                verificar_intentos(intentos);
-            }
+            show_letras_error(caracter);
         }
     } else {
         show_toast("info", "Solo se permiten letras")
@@ -250,30 +257,9 @@ function ejecutar_juego_desktop(evObject) {
         if (/^[A-ZÄËÏÖÜ\u00d1\s]*$/.test(caracter)) {
             const letra_encontrada = array_palabra_verificar.find((element) => element == caracter);
             if (letra_encontrada) {
-                const posicion = array_palabra_verificar.indexOf(caracter);
-                const letra_mostrar = document.getElementById(posicion);
-                if (letra_mostrar) {
-                    letra_mostrar.value = array_letras[posicion];
-                    array_palabra_verificar[posicion] = "";
-                    if (array_palabra_verificar.filter((element) => element == "").length == array_letras.length) {
-                        juego_terminado = true;
-                        setTimeout(music_ganador, 100);
-                        setTimeout(show_confetti, 500);
-                        setTimeout(show_swal_ganaste, 1000);
-                        setTimeout(show_confetti, 2000);
-                    }
-                }
+                show_letras_correct(caracter);
             } else {
-                if (array_errores.find((element) => element == caracter)) {
-                    return;
-                } else {
-                    let error_letras = document.getElementById("error-letras");
-                    let error_letras_html = `<input type="text" class="text-center" value="${caracter}" disabled>`;
-                    error_letras.innerHTML += error_letras_html;
-                    array_errores.push(caracter);
-                    intentos += 1;
-                    verificar_intentos(intentos);
-                }
+                show_letras_error(caracter);
             }
         } else {
             show_toast("info", "Solo se permiten letras")
